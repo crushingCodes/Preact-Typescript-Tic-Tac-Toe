@@ -5,10 +5,13 @@ import * as style from "./style.css";
 const Header: FunctionalComponent = () => {
     return (
         <header class={style.header}>
-            <h1>Preact App</h1>
+            <h1>Preact App - React Tutorial</h1>
             <nav>
                 <Link activeClassName={style.active} href="/">
                     Home
+                </Link>
+                <Link activeClassName={style.active} href="/board">
+                    Board
                 </Link>
                 <Link activeClassName={style.active} href="/profile">
                     Me
