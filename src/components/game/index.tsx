@@ -33,6 +33,16 @@ function calculateWinner(squares: any) {
             return squares[a];
         }
     }
+    const length = squares.length;
+    let occupiedCount = 0;
+    for (const value in squares) {
+        if (squares[value]) {
+            occupiedCount += 1;
+        }
+    }
+    if (occupiedCount === length) {
+        return "draw";
+    }
     return null;
 }
 
@@ -125,7 +135,7 @@ class Game extends Component<any, BoardComponentState> {
     render() {
         const history = this.state.history;
         const current = history[history.length - 1];
-        const winner = calculateWinner(current.squares);
+        const gameStatus = calculateWinner(current.squares);
 
         const moves = history.map((step: number, move: any) => {
             const desc = move ? "Goto move # " + move : "Goto game start";
@@ -137,8 +147,10 @@ class Game extends Component<any, BoardComponentState> {
         });
 
         let status;
-        if (winner) {
-            status = "Winner: " + winner;
+        if (gameStatus && gameStatus === "draw") {
+            status = "Draw!";
+        } else if (gameStatus) {
+            status = "Winner: " + gameStatus;
         } else {
             status = "Next player: " + (this.state.xIsNext ? "X" : "O");
         }
