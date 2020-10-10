@@ -7,20 +7,8 @@ interface SquareComponentState {
 }
 
 type BoardComponentState = {
-    status: string;
-    squares: any;
+    history: any;
     xIsNext: boolean;
-};
-
-const Square: FunctionalComponent<SquareComponentState> = ({
-    value,
-    onClick
-}: SquareComponentState) => {
-    return (
-        <button className={style.square} onClick={() => onClick()}>
-            {value}
-        </button>
-    );
 };
 
 function calculateWinner(squares: any) {
@@ -47,47 +35,32 @@ function calculateWinner(squares: any) {
     return null;
 }
 
-class Game extends Component<any, BoardComponentState> {
-    constructor() {
-        super();
-        this.state = {
-            status: "",
-            squares: Array(9).fill(null),
-            xIsNext: true
-        };
-    }
-    handleClick(i: any) {
-        const squares = this.state.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
-            return;
-        }
-        squares[i] = this.state.xIsNext ? "X" : "O";
+const Square: FunctionalComponent<SquareComponentState> = ({
+    value,
+    onClick
+}: SquareComponentState) => {
+    return (
+        <button className={style.square} onClick={() => onClick()}>
+            {value}
+        </button>
+    );
+};
 
-        this.setState({
-            squares,
-            xIsNext: !this.state.xIsNext
-        });
+class Board extends Component<any, any> {
+    constructor(props: any) {
+        super(props);
     }
     renderSquare(i: number) {
         return (
             <Square
-                value={this.state.squares[i]}
-                onClick={() => this.handleClick(i)}
+                value={this.props.squares[i]}
+                onClick={() => this.props.onClick(i)}
             />
         );
     }
-
     render() {
-        const winner = calculateWinner(this.state.squares);
-        let status;
-        if (winner) {
-            status = "Winner: " + winner;
-        } else {
-            status = "Next player: " + (this.state.xIsNext ? "X" : "O");
-        }
         return (
             <div>
-                <div className={style.status}>{status}</div>
                 <div className={style["board-row"]}>
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
@@ -102,6 +75,64 @@ class Game extends Component<any, BoardComponentState> {
                     {this.renderSquare(6)}
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
+                </div>
+            </div>
+        );
+    }
+}
+
+class Game extends Component<any, BoardComponentState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            history: [
+                {
+                    squares: Array(9).fill(null)
+                }
+            ],
+            xIsNext: true
+        };
+    }
+    handleClick(i: any) {
+        const history = this.state.history;
+        const current = history[history.length - 1];
+        const squares = current.squares.slice();
+        if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
+        squares[i] = this.state.xIsNext ? "X" : "O";
+
+        this.setState({
+            history: history.concat([
+                {
+                    squares
+                }
+            ]),
+            xIsNext: !this.state.xIsNext
+        });
+    }
+
+    render() {
+        const history = this.state.history;
+        const current = history[history.length - 1];
+        const winner = calculateWinner(current.squares);
+        let status;
+        if (winner) {
+            status = "Winner: " + winner;
+        } else {
+            status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+        }
+        return (
+            <div className={style.game}>
+                <div className={style["game-board"]}>
+                    <Board
+                        squares={current.squares}
+                        onClick={(i: any) => this.handleClick(i)}
+                    ></Board>
+                </div>
+                <div className={style["game-info"]}>
+                    <div className={style.status}>{status}</div>
+                    <ol></ol>
                 </div>
             </div>
         );

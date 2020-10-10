@@ -3,6 +3,7 @@ declare namespace StyleCssNamespace {
     export interface IStyleCss {
         "board-row": string;
         game: string;
+        "game-board": string;
         "game-info": string;
         "kbd-navigation": string;
         square: string;
