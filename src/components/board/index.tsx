@@ -5,19 +5,33 @@ interface BoardComponentState {
     time: number;
 }
 interface SqaureComponentState {
-    value: number;
+    value: any;
 }
+type AppProps = {
+    value: any;
+};
 
 // const Square: FunctionalComponent = ({ value }) => {
 //     return <div className={style.square}>{value}</div>;
 // };
-
-class Square extends Component<any, SqaureComponentState> {
-    constructor() {
-        super();
+class Square extends Component<AppProps, SqaureComponentState> {
+    constructor(props: AppProps) {
+        super(props);
+        this.state = {
+            value: null
+        };
     }
     render(): preact.ComponentChild {
-        return <button className={style.square}>{this.props.value}</button>;
+        return (
+            <button
+                onClick={() => {
+                    this.setState({ value: "X" });
+                }}
+                className={style.square}
+            >
+                {this.state.value}
+            </button>
+        );
     }
 }
 class Board extends Component<any, BoardComponentState> {
