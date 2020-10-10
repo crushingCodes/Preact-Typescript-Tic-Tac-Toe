@@ -5,11 +5,9 @@ interface SquareComponentState {
     value: any;
     onClick: any;
 }
-// type AppProps = {
-//     value: any;
-// };
 
 type BoardComponentState = {
+    status: string;
     squares: any;
     xIsNext: boolean;
 };
@@ -25,18 +23,46 @@ const Square: FunctionalComponent<SquareComponentState> = ({
     );
 };
 
+function calculateWinner(squares: any) {
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+    for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (
+            squares[a] &&
+            squares[a] === squares[b] &&
+            squares[a] === squares[c]
+        ) {
+            return squares[a];
+        }
+    }
+    return null;
+}
+
 class Board extends Component<any, BoardComponentState> {
     constructor() {
         super();
         this.state = {
+            status: "",
             squares: Array(9).fill(null),
             xIsNext: true
         };
     }
     handleClick(i: any) {
-        console.log(i);
         const squares = this.state.squares.slice();
+        if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
         squares[i] = this.state.xIsNext ? "X" : "O";
+
         this.setState({
             squares,
             xIsNext: !this.state.xIsNext
@@ -52,8 +78,13 @@ class Board extends Component<any, BoardComponentState> {
     }
 
     render() {
-        const status = "Next player:" + (this.state.xIsNext ? "X" : "O");
-
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+            status = "Winner: " + winner;
+        } else {
+            status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+        }
         return (
             <div>
                 <div className={style.status}>{status}</div>
