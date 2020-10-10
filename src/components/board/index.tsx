@@ -1,79 +1,64 @@
-import { Component, FunctionalComponent, h } from "preact";
+import { Component, ComponentChild, FunctionalComponent, h } from "preact";
 import * as style from "./style.css";
-import { Link } from "preact-router/match";
-interface BoardComponentState {
-    time: number;
-}
-interface SqaureComponentState {
+
+interface SquareComponentState {
     value: any;
+    onClick: any;
 }
-type AppProps = {
-    value: any;
+// type AppProps = {
+//     value: any;
+// };
+
+type BoardComponentState = {
+    squares: any;
 };
 
-// const Square: FunctionalComponent = ({ value }) => {
-//     return <div className={style.square}>{value}</div>;
-// };
-class Square extends Component<AppProps, SqaureComponentState> {
-    constructor(props: AppProps) {
-        super(props);
-        this.state = {
-            value: null
-        };
-    }
-    render(): preact.ComponentChild {
-        return (
-            <button
-                onClick={() => {
-                    this.setState({ value: "X" });
-                }}
-                className={style.square}
-            >
-                {this.state.value}
-            </button>
-        );
-    }
-}
+const Square: FunctionalComponent<SquareComponentState> = ({
+    value,
+    onClick
+}: SquareComponentState) => {
+    return (
+        <button className={style.square} onClick={() => onClick()}>
+            {value}
+        </button>
+    );
+};
+
 class Board extends Component<any, BoardComponentState> {
-    timer: any;
     constructor() {
         super();
-        this.state = { time: Date.now() };
+        this.state = { squares: Array(9).fill(null) };
     }
-
-    // Lifecycle: Called whenever our component is created
-    componentDidMount() {
-        // update time every second
-        this.timer = setInterval(() => {
-            this.setState({ time: Date.now() });
-        }, 1000);
+    handleClick(i: any) {
+        console.log(i);
     }
-
-    // Lifecycle: Called just before our component will be destroyed
-    componentWillUnmount() {
-        // stop when not renderable
-        clearInterval(this.timer);
+    renderSquare(i: number) {
+        return (
+            <Square
+                value={this.state.squares[i]}
+                onClick={() => this.handleClick(i)}
+            />
+        );
     }
 
     render() {
-        const time = new Date(this.state.time).toLocaleTimeString();
         return (
             <div>
                 <div className={style.status}>{status}</div>
                 <div className={style["board-row"]}>
-                    <Square value={0}></Square>
-                    <Square value={1}></Square>
-                    <Square value={2}></Square>
+                    {this.renderSquare(0)}
+                    {this.renderSquare(1)}
+                    {this.renderSquare(2)}
                 </div>
                 <div className={style["board-row"]}>
-                    <Square value={3}></Square>
-                    <Square value={4}></Square>
-                    <Square value={5}></Square>
+                    {this.renderSquare(3)}
+                    {this.renderSquare(4)}
+                    {this.renderSquare(5)}
                 </div>
                 <div className={style["board-row"]}>
-                    <Square value={6}></Square>
-                    <Square value={7}></Square>
-                    <Square value={8}></Square>
+                    {this.renderSquare(6)}
+                    {this.renderSquare(7)}
+                    {this.renderSquare(8)}
                 </div>
             </div>
         );
