@@ -42,6 +42,8 @@ class Board extends Component<any, BoardComponentState> {
     }
 
     render() {
+        const status = "Next player: X";
+
         return (
             <div>
                 <div className={style.status}>{status}</div>
