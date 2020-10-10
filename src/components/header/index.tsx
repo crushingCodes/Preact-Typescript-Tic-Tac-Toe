@@ -8,10 +8,7 @@ const Header: FunctionalComponent = () => {
             <h1>Preact App - React Tutorial</h1>
             <nav>
                 <Link activeClassName={style.active} href="/">
-                    Home
-                </Link>
-                <Link activeClassName={style.active} href="/profile">
-                    Profile
+                    Game
                 </Link>
             </nav>
         </header>
