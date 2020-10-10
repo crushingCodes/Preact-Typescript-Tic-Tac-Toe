@@ -1,4 +1,4 @@
-import { Component, ComponentChild, FunctionalComponent, h } from "preact";
+import { Component, FunctionalComponent, h } from "preact";
 import * as style from "./style.css";
 
 interface SquareComponentState {
@@ -47,7 +47,7 @@ function calculateWinner(squares: any) {
     return null;
 }
 
-class Board extends Component<any, BoardComponentState> {
+class Game extends Component<any, BoardComponentState> {
     constructor() {
         super();
         this.state = {
@@ -108,4 +108,4 @@ class Board extends Component<any, BoardComponentState> {
     }
 }
 
-export default Board;
+export default Game;
