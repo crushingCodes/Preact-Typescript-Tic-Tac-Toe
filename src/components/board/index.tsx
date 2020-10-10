@@ -11,6 +11,7 @@ interface SquareComponentState {
 
 type BoardComponentState = {
     squares: any;
+    xIsNext: boolean;
 };
 
 const Square: FunctionalComponent<SquareComponentState> = ({
@@ -27,10 +28,19 @@ const Square: FunctionalComponent<SquareComponentState> = ({
 class Board extends Component<any, BoardComponentState> {
     constructor() {
         super();
-        this.state = { squares: Array(9).fill(null) };
+        this.state = {
+            squares: Array(9).fill(null),
+            xIsNext: true
+        };
     }
     handleClick(i: any) {
         console.log(i);
+        const squares = this.state.squares.slice();
+        squares[i] = this.state.xIsNext ? "X" : "O";
+        this.setState({
+            squares,
+            xIsNext: !this.state.xIsNext
+        });
     }
     renderSquare(i: number) {
         return (
@@ -42,7 +52,7 @@ class Board extends Component<any, BoardComponentState> {
     }
 
     render() {
-        const status = "Next player: X";
+        const status = "Next player:" + (this.state.xIsNext ? "X" : "O");
 
         return (
             <div>
