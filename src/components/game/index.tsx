@@ -9,6 +9,7 @@ interface SquareComponentState {
 type BoardComponentState = {
     history: any;
     xIsNext: boolean;
+    stepNumber: number;
 };
 
 function calculateWinner(squares: any) {
@@ -90,7 +91,8 @@ class Game extends Component<any, BoardComponentState> {
                     squares: Array(9).fill(null)
                 }
             ],
-            xIsNext: true
+            xIsNext: true,
+            stepNumber: 0
         };
     }
     handleClick(i: any) {
@@ -111,11 +113,29 @@ class Game extends Component<any, BoardComponentState> {
             xIsNext: !this.state.xIsNext
         });
     }
+    jumpTo(stepNumber: number) {
+        // const history = this.state.history;
+        // const target = history[move];
+        this.setState({
+            stepNumber,
+            xIsNext: stepNumber % 2 === 0 ? true : false
+        });
+    }
 
     render() {
         const history = this.state.history;
         const current = history[history.length - 1];
         const winner = calculateWinner(current.squares);
+
+        const moves = history.map((step: number, move: any) => {
+            const desc = move ? "Goto move # " + move : "Goto game start";
+            return (
+                <li>
+                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                </li>
+            );
+        });
+
         let status;
         if (winner) {
             status = "Winner: " + winner;
@@ -132,7 +152,7 @@ class Game extends Component<any, BoardComponentState> {
                 </div>
                 <div className={style["game-info"]}>
                     <div className={style.status}>{status}</div>
-                    <ol></ol>
+                    <ol>{moves}</ol>
                 </div>
             </div>
         );
