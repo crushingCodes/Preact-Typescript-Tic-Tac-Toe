@@ -98,15 +98,7 @@ type GameComponentState = {
 class Game extends Component<any, GameComponentState> {
     constructor(props: any) {
         super(props);
-        this.state = {
-            history: [
-                {
-                    squares: Array(9).fill(null)
-                }
-            ],
-            xIsNext: true,
-            stepNumber: 0
-        };
+        this.newGame();
     }
 
     handleClick(i: any) {
@@ -136,12 +128,25 @@ class Game extends Component<any, GameComponentState> {
         });
     }
 
+    newGame() {
+        this.setState({
+            history: [
+                {
+                    squares: Array(9).fill(null)
+                }
+            ],
+            xIsNext: true,
+            stepNumber: 0
+        });
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const gameStatus = calculateWinner(current.squares);
         const moves = history.map((step: number, move: any) => {
-            const desc = move ? "Goto move # " + move : "Goto game start";
+            if (move === 0) return;
+            const desc = move ? "Goto move # " + move : "";
             return (
                 <li key={step}>
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -167,7 +172,10 @@ class Game extends Component<any, GameComponentState> {
                 </div>
                 <div className={style["game-info"]}>
                     <div className={style.status}>{status}</div>
-                    <ol>{moves}</ol>
+                    <ol>
+                        <button onClick={() => this.newGame()}>New Game</button>
+                        {moves}
+                    </ol>
                 </div>
             </div>
         );
