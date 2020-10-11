@@ -1,6 +1,10 @@
-# Preact TypeScript starter project
+# Preact TypeScript Tic Tac Toe
+Followed the tutorial from https://reactjs.org/tutorial/tutorial.html
+to create a simple game using preact typescript. Added a few changes and improvements to suit my requirements.
 
-## CLI Commands
+![Game Screenshot](screenshot.png)
+
+## Preact CLI Commands
 *   `npm install`: Installs dependencies
 
 *   `npm run dev`: Run a development, HMR server
