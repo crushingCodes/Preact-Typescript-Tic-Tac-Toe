@@ -1,15 +1,9 @@
 import { Component, FunctionalComponent, h } from "preact";
 import * as style from "./style.css";
 
-interface SquareComponentState {
+type SquareComponentProps = {
     value: any;
     onClick: any;
-}
-
-type BoardComponentState = {
-    history: any;
-    xIsNext: boolean;
-    stepNumber: number;
 };
 
 function calculateWinner(squares: any) {
@@ -47,19 +41,22 @@ function calculateWinner(squares: any) {
     return null;
 }
 
-const Square: FunctionalComponent<SquareComponentState> = ({
+const Square: FunctionalComponent<SquareComponentProps> = ({
     value,
     onClick
-}: SquareComponentState) => {
+}: SquareComponentProps) => {
     return (
         <button className={style.square} onClick={() => onClick()}>
             {value}
         </button>
     );
 };
-
+type BoardComponentProps = {
+    squares: any[];
+    onClick: any;
+};
 class Board extends Component<any, any> {
-    constructor(props: any) {
+    constructor(props: BoardComponentProps) {
         super(props);
     }
     renderSquare(i: number) {
@@ -92,8 +89,13 @@ class Board extends Component<any, any> {
         );
     }
 }
+type GameComponentState = {
+    history: any[];
+    xIsNext: boolean;
+    stepNumber: number;
+};
 
-class Game extends Component<any, BoardComponentState> {
+class Game extends Component<any, GameComponentState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -106,6 +108,7 @@ class Game extends Component<any, BoardComponentState> {
             stepNumber: 0
         };
     }
+
     handleClick(i: any) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
@@ -125,9 +128,8 @@ class Game extends Component<any, BoardComponentState> {
             stepNumber: history.length
         });
     }
+
     jumpTo(stepNumber: number) {
-        // const history = this.state.history;
-        // const target = history[move];
         this.setState({
             stepNumber,
             xIsNext: stepNumber % 2 === 0 ? true : false
@@ -138,7 +140,6 @@ class Game extends Component<any, BoardComponentState> {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const gameStatus = calculateWinner(current.squares);
-
         const moves = history.map((step: number, move: any) => {
             const desc = move ? "Goto move # " + move : "Goto game start";
             return (
