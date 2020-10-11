@@ -14,22 +14,23 @@ ol, ul {
 }
 
 .status {
-  margin-bottom: 10px;
+  margin: 40px;
+  font-size: 40px;
 }
 
 .square {
   background: #fff;
-  border: 1px solid #999;
+  border: 2px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 60px;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
+  line-height: 100px;
+  height: 100px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 100px;
 }
 
 .square:focus {
@@ -49,4 +50,5 @@ ol, ul {
   margin-left: 20px;
 }
 .game-board {
+  margin: 40px;
 }
